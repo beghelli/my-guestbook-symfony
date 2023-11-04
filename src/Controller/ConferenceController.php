@@ -21,7 +21,7 @@ class ConferenceController extends AbstractController
 		]);
 	}
 
-	#[Route('/conference/{id}', name: 'conference')]
+	#[Route('/conference/{slug}', name: 'conference')]
 	public function show(Request $request, Environment $twig, Conference $conference, CommentRepository $commentRepository): Response
 	{
 		$offset = $request->query->getInt('offset', 0);
