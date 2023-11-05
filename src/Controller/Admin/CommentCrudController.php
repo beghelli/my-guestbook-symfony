@@ -12,11 +12,20 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CommentCrudController extends AbstractCrudController
 {
+
+	public function __construct(
+		#[Autowire('%photo_relative_path%')] private string $photoRelativePath
+	)
+	{
+	}
+
 	public static function getEntityFqcn(): string
 	{
 		return Comment::class;
@@ -44,7 +53,9 @@ class CommentCrudController extends AbstractCrudController
 		yield EmailField::new('email');
 		yield TextareaField::new('text')
 			->hideOnIndex();
-		yield TextField::new('photoFilename')
+		yield ImageField::new('photoFilename')
+			->setBasePath($this->photoRelativePath)
+			->setLabel('Photo')
 			->onlyOnIndex();
 
 		$createdAt = DateTimeField::new('createdAt')->setFormTypeOptions([
